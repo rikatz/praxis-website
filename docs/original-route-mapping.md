@@ -1,8 +1,14 @@
 # Original route mapping
 
-The mapping below covers all 40 public HTML URLs in [`original-site-inventory.json`](original-site-inventory.json). Canonical source pages use the selected product release; root aliases should preserve incoming fragments and accept both the crawled path and its slash variant. Paths that already exist on the new site stay in place.
+The mapping below is the build input for the 40 historical page and standalone-resource URLs. The broader [`original-site-inventory.json`](original-site-inventory.json) records documentation pages and headings, homepage and example copy, feed endpoints, and all original static files. It is a coverage ledger only; `tools/prepare-routes.py` continues to use this mapping as the sole redirect configuration.
 
-The old Grid pages are external discovery routes, not imported release docs. The blog contains the one retained announcement, so its index and post routes stay in place; archive and tag paths lead back to the blog. The earlier community summary route remains an alias to the post. Current examples and search pages remain at their existing routes.
+Canonical source pages use the selected product release; root aliases should preserve incoming fragments and accept both the crawled path and its slash variant. Paths that already exist on the new site stay in place. The old standalone HTML resources are retained byte-for-byte at their original paths, so those paths are kept instead of redirected to adapted guides.
+
+All 44 original `/img/` files are also retained byte-for-byte at those public paths because the standalone resources reference them. Their archive-source copies and hashes are listed in the coverage ledger; the old `CNAME` is preserved only as source because it names the retired host.
+
+The exact HTML retains root-relative image references. Those references work for a root-hosted deployment; a subpath deployment may not resolve them, since changing them would break the byte-for-byte requirement.
+
+The current Grid route is external discovery, not an imported release catalog. The original Grid pages are preserved under `/archive/old-site/docs/grid/`; their legacy routes still lead to `/grid/` until the dedicated historical-route pass. The blog contains the one retained announcement, so its index and post routes stay in place; archive and tag paths lead back to the blog. Current examples and search pages remain at their existing routes.
 
 | Original path | Destination | Treatment |
 | --- | --- | --- |
@@ -35,17 +41,17 @@ The old Grid pages are external discovery routes, not imported release docs. The
 | `/docs/getting-started/installation` | `/guides/install/` | Website-owned verified installation choices. |
 | `/docs/getting-started/introduction` | `/praxis/` | Updated runnable-proxy overview. |
 | `/docs/getting-started/quickstart` | `/guides/first-proxy/` | Website-owned end-to-end reverse-proxy tutorial. |
-| `/docs/grid/concepts` | `/grid/` | External Grid discovery; current README and unversioned original guide are distinguished. |
-| `/docs/grid/getting-started` | `/grid/` | External Grid discovery; no setup copied from an unselected revision. |
-| `/docs/grid/overview` | `/grid/` | External Grid discovery; current README and unversioned original guide are distinguished. |
+| `/docs/grid/concepts` | `/grid/` | Current Grid discovery; original unversioned concepts page is preserved in the historical archive. |
+| `/docs/grid/getting-started` | `/grid/` | Current Grid discovery; original unversioned setup page is preserved in the historical archive. |
+| `/docs/grid/overview` | `/grid/` | Current Grid discovery; original unversioned overview is preserved in the historical archive. |
 | `/docs/protocols/tls` | `/praxis/v0.7.2/operating/tls/` (`docs/operating/tls.md`) | Release-resolved TLS/mTLS guide. |
 | `/docs/security/hardening` | `/praxis/v0.7.2/operating/security-hardening/` (`docs/operating/security-hardening.md`) | Release-resolved hardening guide. |
 | `/examples/` | `/examples/` | Keep the new versioned example discovery hub. |
-| `/praxis-ai-booklet.html` | `/visual-guides/ai/` | Alias to current AI visual guide. |
-| `/praxis-core-booklet.html` | `/visual-guides/praxis/` | Alias to current Core visual guide. |
-| `/praxis-grid-booklet.html` | `/grid/` | Alias to external discovery page, which links the unversioned original booklet. |
+| `/praxis-ai-booklet.html` | `/praxis-ai-booklet.html` | Keep the original standalone HTML resource byte-for-byte. |
+| `/praxis-core-booklet.html` | `/praxis-core-booklet.html` | Keep the original standalone HTML resource byte-for-byte. |
+| `/praxis-grid-booklet.html` | `/praxis-grid-booklet.html` | Keep the original standalone HTML resource byte-for-byte. |
 | `/search` | `/search/` | Keep the current local search page. |
-| `/architecture/diagram.html` | `/visual-guides/praxis/` | Alias to current Core visual guide. |
+| `/architecture/diagram.html` | `/architecture/diagram.html` | Keep the original standalone HTML resource byte-for-byte. |
 
 ## Alias notes
 

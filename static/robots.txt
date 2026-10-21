@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /archive/old-site/source/
+Disallow: /img/
+Disallow: /praxis-core-booklet.html
+Disallow: /praxis-ai-booklet.html
+Disallow: /praxis-grid-booklet.html
+Disallow: /architecture/diagram.html

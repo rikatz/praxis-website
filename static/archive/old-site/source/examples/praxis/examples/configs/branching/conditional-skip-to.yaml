@@ -1,0 +1,82 @@
+# Conditional Skip-To Branch (on_result + rejoin: <named>)
+#
+# Skips the remaining middleware for clean requests.
+# When guardrails reports status=passed, the branch
+# fires and resumes at the routing filter, jumping over
+# the inspection middleware in between. The security
+# filters (CORS, forwarded_headers) sit before the branch
+# host because a skip may never bypass one.
+#
+# Use case: clean requests that pass guardrails don't
+# need the extra inspection that flagged ones get.
+#
+# Usage:
+#   cargo run -p praxis-proxy -- -c examples/configs/branching/conditional-skip-to.yaml
+
+listeners:
+  - name: web
+    address: "127.0.0.1:8080"
+    filter_chains: [main]
+
+filter_chains:
+  - name: main
+    filters:
+      # Stamp each request for tracing
+      - filter: request_id
+
+      # Browser-facing middleware runs before the branch host: a skip-to
+      # rejoin may never bypass a security filter, so these sit up front
+      - filter: cors
+        allow_origins:
+          - "*"
+
+      - filter: forwarded_headers
+
+      # Guardrails: inspect headers. action: flag writes
+      # results without rejecting, so branches decide.
+      - filter: guardrails
+        action: flag
+        rules:
+          - target: header
+            name: "X-Danger"
+            contains: "true"
+        branch_chains:
+          # Clean requests jump straight to routing
+          - name: skip_to_routing
+            on_result:
+              filter: guardrails
+              result: passed
+            # Rejoin at the named "routing" filter
+            rejoin: routing
+            chains:
+              - name: clean_prep
+                filters:
+                  # Tag the request as clean before
+                  # it reaches routing
+                  - filter: headers
+                    request_add:
+                      - name: X-Clean
+                        value: "true"
+
+      # Inspection middleware: only flagged requests reach
+      # it, since clean ones skipped ahead to routing
+      - filter: headers
+        request_add:
+          - name: X-Inspected
+            value: "full"
+
+      # Named target for skip-to rejoin
+      - filter: router
+        name: routing
+        routes:
+          - path_prefix: "/"
+            cluster: backend
+
+      - filter: load_balancer
+        clusters:
+          - name: backend
+            endpoints:
+              - "127.0.0.1:3000"
+
+insecure_options:
+  allow_private_endpoints: true # example proxies to local backends

@@ -1,5 +1,6 @@
 {{ define "main" }}
 <article class="td-content praxis-guide">
+    {{- if not .Params.archive_title_in_content }}
     <header>
       {{- if eq .Section "guides" -}}
         {{- $project := index hugo.Data.docs_build_versions.products "praxis" -}}
@@ -8,6 +9,7 @@
       <h1>{{ .Title }}</h1>
       {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
     </header>
+    {{- end }}
     {{- $toc := .TableOfContents -}}
     {{- if and (not .Params.notoc) $toc (ne $toc `<nav id="TableOfContents"></nav>`) }}
     <details class="docs-mobile-toc">

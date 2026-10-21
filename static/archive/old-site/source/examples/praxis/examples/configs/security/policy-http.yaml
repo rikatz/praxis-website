@@ -1,0 +1,40 @@
+# Generic-HTTP authorization
+#
+# Generic-HTTP authorization for non-MCP traffic using the Praxis Policy Engine. The `policy` filter loads a policy that declares only a `global`
+# HTTP policy (no entity routes), so it authorizes at the HTTP layer: it
+# resolves JWT identity and evaluates the policy's `global` block over the HTTP
+# request line, headers, and identity claims. Denials become plain HTTP
+# responses (with a custom `denyWith` status/body/headers).
+#
+# Usage:
+#   cargo run -p praxis-proxy -- -c examples/configs/security/policy-http.yaml
+
+listeners:
+  - name: default
+    address: "127.0.0.1:8080"
+    filter_chains:
+      - main
+
+filter_chains:
+  - name: main
+    filters:
+      # Generic-HTTP authorization. `config_path` points at the policy
+      # document. The policy declares only a `global` HTTP policy (no entity
+      # routes), so the filter authorizes at the HTTP layer directly — no
+      # protocol classifier needed.
+      - filter: policy
+        config_path: /etc/praxis/http-policy.yaml
+
+      - filter: router
+        routes:
+          - path_prefix: "/"
+            cluster: backend
+
+      - filter: load_balancer
+        clusters:
+          - name: backend
+            endpoints:
+              - "127.0.0.1:3000"
+
+insecure_options:
+  allow_private_endpoints: true # example proxies to local backends

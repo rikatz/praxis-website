@@ -9,6 +9,7 @@ __pycache__/
 
 # Local planning and review notes; keep operational route data and its explanation committable.
 /docs/*
+!/docs/original-site-inventory.json
 !/docs/original-route-mapping.json
 !/docs/original-route-mapping.md
 

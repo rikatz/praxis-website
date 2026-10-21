@@ -1,5 +1,5 @@
 {
-  "checked": "2026-10-01",
+  "checked": "2026-10-21",
   "source_inventory": "original-site-inventory.json",
   "route_count": 40,
   "routes": [
@@ -38,10 +38,10 @@
     {"source": "/docs/protocols/tls", "target": "/praxis/v0.7.2/operating/tls/", "product": "praxis", "version": "v0.7.2", "source_path": "docs/operating/tls.md", "action": "versioned-page"},
     {"source": "/docs/security/hardening", "target": "/praxis/v0.7.2/operating/security-hardening/", "product": "praxis", "version": "v0.7.2", "source_path": "docs/operating/security-hardening.md", "action": "versioned-page"},
     {"source": "/examples/", "target": "/examples/", "action": "keep"},
-    {"source": "/praxis-ai-booklet.html", "target": "/visual-guides/ai/", "action": "alias"},
-    {"source": "/praxis-core-booklet.html", "target": "/visual-guides/praxis/", "action": "alias"},
-    {"source": "/praxis-grid-booklet.html", "target": "/grid/", "action": "alias", "external_resource": "https://praxis.fast/praxis-grid-booklet.html"},
+    {"source": "/praxis-ai-booklet.html", "target": "/praxis-ai-booklet.html", "action": "keep"},
+    {"source": "/praxis-core-booklet.html", "target": "/praxis-core-booklet.html", "action": "keep"},
+    {"source": "/praxis-grid-booklet.html", "target": "/praxis-grid-booklet.html", "action": "keep"},
     {"source": "/search", "target": "/search/", "action": "keep"},
-    {"source": "/architecture/diagram.html", "target": "/visual-guides/praxis/", "action": "alias"}
+    {"source": "/architecture/diagram.html", "target": "/architecture/diagram.html", "action": "keep"}
   ]
 }

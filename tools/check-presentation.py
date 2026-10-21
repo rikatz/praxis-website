@@ -71,9 +71,10 @@ def main():
         assert page.h1 == 1, f'{path}: expected one H1, got {page.h1}'
         assert len(page.canonical) == 1, f'{path}: missing/duplicate canonical'
         relative = path.relative_to(public).parts
-        archived = (len(relative) > 2 and relative[0] in defaults
-                    and relative[1] in versions[relative[0]]
-                    and relative[1] != defaults[relative[0]])
+        archived = (relative[0] == 'archive' or
+                    (len(relative) > 2 and relative[0] in defaults
+                     and relative[1] in versions[relative[0]]
+                     and relative[1] != defaults[relative[0]]))
         expected = 'noindex, follow' if archived else 'index, follow'
         assert page.robots == [expected], f'{path}: unexpected robots {page.robots}'
         checked += 1
